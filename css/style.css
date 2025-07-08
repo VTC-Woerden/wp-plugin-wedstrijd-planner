@@ -1,0 +1,69 @@
+.plugin_container {
+    margin-top: 20px;
+    margin-right: 20px;
+    display: flex;
+}
+
+.section {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: white;
+    border: 1px solid #c3c4c7;
+    box-sizing: border-box;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+.wedstrijden {
+    flex: 1;
+}
+
+.wedstrijd_dag h1 {
+    padding-bottom: 10px;
+}
+
+.wedstrijd_veld {
+    margin-bottom: 10px;
+}
+
+.sidebar {
+    flex-basis: 300px;
+    height: fit-content;
+    margin-left: 20px;
+}
+
+.sidebar h3 {
+    margin: 0;
+}
+
+.sidebar .taken {
+    margin: 20px 0px;
+}
+
+.sidebar .taken .team {
+    display: flex;
+    justify-content: space-between;
+}
+
+.settings_form textarea {
+    height: 600px;
+}
+
+.wedstrijden_tabel tbody tr td {
+    vertical-align: middle;
+}
+
+.icon-veranderd {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ff1d1d;
+}
+
+.icon-nietveranderd {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #1dff1d;
+}
