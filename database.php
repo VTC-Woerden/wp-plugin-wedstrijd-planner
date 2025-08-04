@@ -5,6 +5,7 @@ function activate_wedstrijd_planner() {
 
 	$wedstrijd_planner_table_name = get_wedstrijd_planner_table_name();
 	$teams_table_name = get_teams_table_name();
+    $exclude_poules_table_name = get_exclude_poules_table_name();
 
     // Define the charset
     $charset_collate = $wpdb->get_charset_collate();
@@ -19,6 +20,7 @@ function activate_wedstrijd_planner() {
             datum datetime NOT NULL,
 			veld varchar(255),
 			regio varchar(255),
+            poule varchar(255),
 			teller varchar(255),
 			scheidsrechter varchar(255),
 			actief boolean DEFAULT 1,
@@ -39,6 +41,22 @@ function activate_wedstrijd_planner() {
         $sql = "CREATE TABLE $teams_table_name (
             id INT NOT NULL AUTO_INCREMENT,
             team varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+
+        // Include the upgrade file for dbDelta
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        // Execute the query
+        dbDelta($sql);
+    }
+
+    // Check if the table already exists
+    if ($wpdb->get_var("SHOW TABLES LIKE '$exclude_poules_table_name'") != $exclude_poules_table_name) {
+        // SQL query to create the table
+        $sql = "CREATE TABLE $exclude_poules_table_name (
+            id INT NOT NULL AUTO_INCREMENT,
+            poule varchar(255) NOT NULL,
             PRIMARY KEY (id)
         ) $charset_collate;";
 
@@ -131,7 +149,7 @@ function remove_all_veranderd_statuses() {
     $wpdb->query("UPDATE $table_name SET veranderd = 0");
 }
 
-function fetch_database_wedstrijden($filter_date = null) {
+function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null) {
 	global $wpdb;
 
     // Define the table name (with WordPress prefix)
@@ -140,13 +158,41 @@ function fetch_database_wedstrijden($filter_date = null) {
     // Base query
     $query = "SELECT * FROM $table_name";
     
+    // Initialize where clauses array
+    $where_clauses = [];
+    $query_params = [];
+
     // Add date filter if provided
     if ($filter_date !== null) {
-        $query .= $wpdb->prepare(" WHERE DATE(datum) = %s", $filter_date);
+        $where_clauses[] = "DATE(datum) = %s";
+        $query_params[] = $filter_date;
+    }
+    
+    // Add other filter if provided
+    if ($exclude_poules !== null) {
+
+        $exclude_poules = array_map(function($p) {
+            return "'" . esc_sql($p) . "'";
+        }, $exclude_poules);
+        $exclude_poules = implode(',', $exclude_poules);
+
+        $where_clauses[] = "poule NOT IN ($exclude_poules)";
+    }
+    
+    // Combine where clauses if any exist
+    if (!empty($where_clauses)) {
+        $query .= " WHERE " . implode(" AND ", $where_clauses);
     }
     
     // Add ordering
     $query .= " ORDER BY datum";
+
+    // Prepare and execute the query if we have parameters
+    if (!empty($query_params)) {
+        $query = $wpdb->prepare($query, $query_params);
+    }
+
+    var_dump($query);
 
 	// Query to select all rows
     $results = $wpdb->get_results($query);
@@ -165,6 +211,7 @@ function fetch_database_wedstrijden($filter_date = null) {
 					'datum' => $row->datum, 
 					'veld' => $row->veld,
 					'regio' => $row->regio,
+                    'poule' => $row->poule,
 					'teller' => $row->teller,
 					'scheidsrechter' => $row->scheidsrechter,
 					'actief' => $row->actief,
@@ -188,3 +235,7 @@ function get_teams_table_name() {
 	return $wpdb->prefix . 'wedstrijd_planner_teams';
 }
 
+function get_exclude_poules_table_name() {
+	global $wpdb;
+	return $wpdb->prefix . 'wedstrijd_planner_exclude_poules';
+}

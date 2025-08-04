@@ -68,7 +68,7 @@ function fetch_wedstrijden() {
 				'datum' => $row[1], 
 				'veld' => $row[5],
 				'regio' => $row[6],
-				'scheidsrechter' => $row[12],
+				'poule' => $row[7]
 			));
 	}
 
@@ -98,29 +98,44 @@ function group_by_dynamic_half_year(array $items) {
     return $grouped;
 }
 
+
+
 function wedstrijd_planner_init(){
+
 	add_thickbox();
 
 	handle_save_wedstrijden();
 	handle_vernieuw_wedstrijden();
 	handle_verwijder_rode_bolletjes();
 
-	$alleWedstrijden = fetch_database_wedstrijden();
+	$exclude_poules = get_entries("poule", "wedstrijd_planner_exclude_poules");
+
+	$alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules);
+
+	if (count($alleWedstrijden) == 0) {
+		?>
+			<h3>Geen wedstrijden gevonden. Klik hieronder om wedstrijden op te halen.</h3>
+			<form method="POST" id="vernieuw_wedstrijden_form">
+				<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
+				<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Haal wedstrijden op"/>
+			</form>
+		<?php
+
+		return;
+	}
 
 	$wedstrijdenSeizoenen = group_by_dynamic_half_year($alleWedstrijden);
 
 	$activeSeason = $_GET['season'] ?? array_key_last($wedstrijdenSeizoenen);
 
-	$wedstrijden = [];
-	if ($activeSeason != "") {
-		$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
-	}
+	$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
 
 	render_header($wedstrijdenSeizoenen);
 	
 	echo '<div class="wrap plugin_container">';
 
 	render_tabel($wedstrijden);
+
 
 	render_sidebar($wedstrijden);
 

@@ -27,13 +27,15 @@ function update_sidebar_counters() {
 
     let teamsMetTaak = {};
 
+    allTeams.forEach((team) => {
+        teamsMetTaak[team] = 0;
+    })
+
+    console.log(teamsMetTaak)
+
     function incrementTeams(team) {
         if (!team) return;
-        if (team in teamsMetTaak) {
-            teamsMetTaak[team]++;
-        } else {
-            teamsMetTaak[team] = 1;
-        }
+        teamsMetTaak[team]++;
     }
 
     let rows = document.querySelectorAll(".plugin_container .wedstrijden_tabel tbody tr");
@@ -46,13 +48,20 @@ function update_sidebar_counters() {
         incrementTeams(scheidsrechter);
     })
 
-    for (let team of allTeams) {
-        const teamNoWhitespace = team.replace(/\s/g, "");
-        if (team in teamsMetTaak) {
-            document.querySelector(`.sidebar .team[data-team=${teamNoWhitespace}] .counter`).textContent = teamsMetTaak[team];
-        } else {
-            document.querySelector(`.sidebar .team[data-team=${teamNoWhitespace}] .counter`).textContent = '0';
-        }
+    let teamEntries = Object.entries(teamsMetTaak);
+
+    let sortedTeams = teamEntries.sort((a, b) => b[1] - a[1]);
+
+    document.querySelector("#wpbody-content > div.wrap.plugin_container > div.sidebar.section > div:nth-child(1) > table > tbody").innerHTML = ""
+
+    for (let team of sortedTeams) {
+
+        document.querySelector("#wpbody-content > div.wrap.plugin_container > div.sidebar.section > div:nth-child(1) > table > tbody").insertAdjacentHTML('beforeend', `
+            <tr class="team">
+                <td class="team_naam">${team[0]}</td>
+                <td class="counter">${team[1]}</td>
+            </tr>
+        `);
     }
 }
 

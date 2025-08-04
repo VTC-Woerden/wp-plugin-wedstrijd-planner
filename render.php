@@ -49,7 +49,7 @@ function get_unique_teams_from_wedstrijden($wedstrijden) {
 function get_all_teams($wedstrijden){
 	$wedstrijdenTeams = get_unique_teams_from_wedstrijden($wedstrijden);
 
-	$databaseTeams = get_teams();
+	$databaseTeams = get_entries("team", "wedstrijd_planner_teams");
 
 	return array_unique(array_merge($databaseTeams, $wedstrijdenTeams));
 }
@@ -136,6 +136,9 @@ function render_tabel($wedstrijden) {
 }
 
 function render_sidebar($wedstrijden) {
+	if (!$wedstrijden) {
+		$wedstrijden = [];
+	}
 	?>
 		<div class="sidebar section">
 			<div>
@@ -143,7 +146,7 @@ function render_sidebar($wedstrijden) {
 
 				<table class="taken widefat striped fixed">
 					<?php foreach(get_all_teams($wedstrijden) as $key=>$value): ?>
-						<tr class="team" data-team="<?= str_replace(' ', '', $value) ?>">
+						<tr class="team">
 							<td class="team_naam"><?= $value ?></td>
 							<td class="counter">0</td>
 						</tr>
