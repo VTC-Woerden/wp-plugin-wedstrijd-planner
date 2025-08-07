@@ -192,8 +192,6 @@ function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null)
         $query = $wpdb->prepare($query, $query_params);
     }
 
-    var_dump($query);
-
 	// Query to select all rows
     $results = $wpdb->get_results($query);
 
