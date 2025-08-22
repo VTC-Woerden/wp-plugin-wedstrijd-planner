@@ -3,7 +3,7 @@
  * Template Name: Speeldag page
  */
 
-$date = '2025-09-20';
+$date = '2025-09-12';
 
 $wedstrijden = fetch_database_wedstrijden($date);
 
@@ -16,8 +16,23 @@ function get_wedstrijd_op_veld($wedstrijden, $veld) {
 function render_wedstrijd($wedstrijden, $veld) {
     $wedstrijden_op_veld = get_wedstrijd_op_veld($wedstrijden, $veld);
 
+    $teams_with_second_referees = get_entries("team", "wedstrijd_planner_second_referee");
+	$teams_with_teller_only = get_entries("team", "wedstrijd_planner_teller_only");
+
+
+
     foreach ($wedstrijden_op_veld as $wedstrijd) {
         $datetime = new DateTime($wedstrijd["datum"]);
+
+        $second_referee = false;
+        if (in_array($wedstrijd["team_thuis"], $teams_with_second_referees)) {
+            $second_referee = true;
+        }
+
+        $teller_only = false;
+        if (in_array($wedstrijd["team_thuis"], $teams_with_teller_only)) {
+            $teller_only = true;
+        }
 
         ?>
             <div class="wedstrijd">
@@ -26,7 +41,9 @@ function render_wedstrijd($wedstrijden, $veld) {
                     <span class='teams'><?= $wedstrijd["team_thuis"] ?> -  <?= $wedstrijd["team_uit"] ?></span>
                 </div>
                 <div class="taken">
-                    <span>Fluiten <b><?= $wedstrijd['scheidsrechter'] ?></b></span> -
+                    <?php if (!$teller_only) : ?>
+                        <span><?= $second_referee ? "Tweede scheidsrechter" : "Fluiten" ?> <b><?= $wedstrijd['scheidsrechter'] ?></b></span> -
+                    <?php endif; ?>
                     <span>Tellen <b><?= $wedstrijd['teller'] ?></b></span>
                 </div>
             </div>

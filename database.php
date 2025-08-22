@@ -6,6 +6,8 @@ function activate_wedstrijd_planner() {
 	$wedstrijd_planner_table_name = get_wedstrijd_planner_table_name();
 	$teams_table_name = get_teams_table_name();
     $exclude_poules_table_name = get_exclude_poules_table_name();
+    $second_referee_table_name = get_second_referee_table_name();
+    $teller_only_table_name = get_teller_only_table_name();
 
     // Define the charset
     $charset_collate = $wpdb->get_charset_collate();
@@ -57,6 +59,37 @@ function activate_wedstrijd_planner() {
         $sql = "CREATE TABLE $exclude_poules_table_name (
             id INT NOT NULL AUTO_INCREMENT,
             poule varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+
+        // Include the upgrade file for dbDelta
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        // Execute the query
+        dbDelta($sql);
+    }
+
+    // Check if the table already exists
+    if ($wpdb->get_var("SHOW TABLES LIKE '$se'") != $second_referee_table_name) {
+        // SQL query to create the table
+        $sql = "CREATE TABLE $second_referee_table_name (
+            id INT NOT NULL AUTO_INCREMENT,
+            team varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+
+        // Include the upgrade file for dbDelta
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        // Execute the query
+        dbDelta($sql);
+    }
+
+    if ($wpdb->get_var("SHOW TABLES LIKE '$se'") != $teller_only_table_name) {
+        // SQL query to create the table
+        $sql = "CREATE TABLE $teller_only_table_name (
+            id INT NOT NULL AUTO_INCREMENT,
+            team varchar(255) NOT NULL,
             PRIMARY KEY (id)
         ) $charset_collate;";
 
@@ -223,6 +256,24 @@ function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null)
 	return $wedstrijden;
 }
 
+function fetch_database_wedstrijden_for_team($team) {
+	global $wpdb;
+
+    // Define the table name (with WordPress prefix)
+    $table_name = get_wedstrijd_planner_table_name();
+
+    // Base query
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * FROM $table_name WHERE teller = %s OR scheidsrechter = %s",
+            $team,
+            $team
+        )
+    );
+
+    return $results;
+}
+
 function get_wedstrijd_planner_table_name() {
 	global $wpdb;
 	return $wpdb->prefix . 'wedstrijd_planner';
@@ -236,4 +287,15 @@ function get_teams_table_name() {
 function get_exclude_poules_table_name() {
 	global $wpdb;
 	return $wpdb->prefix . 'wedstrijd_planner_exclude_poules';
+}
+
+function get_second_referee_table_name() {
+	global $wpdb;
+	return $wpdb->prefix . 'wedstrijd_planner_second_referee';
+}
+
+
+function get_teller_only_table_name() {
+	global $wpdb;
+	return $wpdb->prefix . 'wedstrijd_planner_teller_only';
 }

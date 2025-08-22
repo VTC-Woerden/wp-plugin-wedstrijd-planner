@@ -10,7 +10,7 @@ document.querySelector(".plugin_container .wedstrijden").addEventListener("chang
         .forEach((row) => {
             let code = row.querySelector(".naam").getAttribute("title");
             let teller = row.querySelector(".teller select").value;
-            let scheidsrechter = row.querySelector(".scheidsrechter select").value;
+            let scheidsrechter = row.querySelector(".scheidsrechter select")?.value;
 
             wedstrijden.push({code, teller, scheidsrechter})
         })
@@ -42,7 +42,7 @@ function update_sidebar_counters() {
 
     rows.forEach((row) => {
         let teller = row.querySelector(".teller select").value;
-        let scheidsrechter = row.querySelector(".scheidsrechter select").value;
+        let scheidsrechter = row.querySelector(".scheidsrechter select")?.value;
 
         incrementTeams(teller);
         incrementTeams(scheidsrechter);

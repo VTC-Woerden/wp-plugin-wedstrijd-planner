@@ -100,6 +100,34 @@ function wedstrijd_planner_submenu() {
 
     $exclude_poules = get_entries("poule", "wedstrijd_planner_exclude_poules");
 
+    if(isset($_POST['second_referee']) && wp_verify_nonce($_POST['save_second_referee_nonce'])) {
+
+		if ($_POST['second_referee'] != null) {
+            $second_referee = explode(',', preg_replace('/[^\S ]+/', '', $_POST['second_referee']));
+ 
+            $second_referee = array_filter($second_referee);
+
+            truncate_table("wedstrijd_planner_second_referee");
+            insert_entries($second_referee, "team", "wedstrijd_planner_second_referee");
+		}
+	}
+
+    $second_referee = get_entries("team", "wedstrijd_planner_second_referee");
+
+    if(isset($_POST['teller_only']) && wp_verify_nonce($_POST['save_teller_only_nonce'])) {
+
+		if ($_POST['teller_only'] != null) {
+            $teller_only = explode(',', preg_replace('/[^\S ]+/', '', $_POST['teller_only']));
+ 
+            $teller_only = array_filter($teller_only);
+
+            truncate_table("wedstrijd_planner_teller_only");
+            insert_entries($teller_only, "team", "wedstrijd_planner_teller_only");
+		}
+	}
+
+    $teller_only = get_entries("team", "wedstrijd_planner_teller_only");
+
     ?>
     <div class="wrap wedstrijd_planner_settings">
         <h1>Wedstrijd Planner settings</h1>
@@ -110,11 +138,25 @@ function wedstrijd_planner_submenu() {
             <input type="submit" name="save_teas" class="button button-primary" value="Opslaan">
         </form>
 
-        <p>Exclude poules</p>
+        <p>Gefilterde wedstrijdcodes</p>
         <form method="POST" class="settings_form">
             <?php wp_nonce_field(-1, 'save_exclude_poules_nonce') ?>
             <textarea name="exclude_poules"><?= join(",\n",$exclude_poules); ?></textarea>
             <input type="submit" name="save_exclude_poules" class="button button-primary" value="Opslaan">
+        </form>
+
+        <p>Teams met tweedescheidsrechter</p>
+        <form method="POST" class="settings_form">
+            <?php wp_nonce_field(-1, 'save_second_referee_nonce') ?>
+            <textarea name="second_referee"><?= join(",\n",$second_referee); ?></textarea>
+            <input type="submit" name="save_second_referee" class="button button-primary" value="Opslaan">
+        </form>
+
+        <p>Teams met alleen tellers</p>
+        <form method="POST" class="settings_form">
+            <?php wp_nonce_field(-1, 'save_teller_only_nonce') ?>
+            <textarea name="teller_only"><?= join(",\n",$teller_only); ?></textarea>
+            <input type="submit" name="save_teller_only" class="button button-primary" value="Opslaan">
         </form>
     </div>
     <?php

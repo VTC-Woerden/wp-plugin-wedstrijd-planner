@@ -1,6 +1,6 @@
 <?php
 
-function render_wedstrijden($wedstrijden, $wedstrijd_op_veld) {
+function render_wedstrijden($wedstrijden, $wedstrijd_op_veld, $teams_with_second_referees, $teams_with_teller_only) {
 	$row = "";
 
 	$teams = get_all_teams($wedstrijden);
@@ -8,6 +8,16 @@ function render_wedstrijden($wedstrijden, $wedstrijd_op_veld) {
 	foreach ($wedstrijd_op_veld as $key => $value) {
 		$teller = render_teller($teams, $value['teller']);
 		$scheidsrechter = render_scheidsrechter($teams, $value['scheidsrechter']);
+
+		$second_referee = false;
+		if (in_array($value["team_thuis"], $teams_with_second_referees)) {
+			$second_referee = true;
+		}
+
+		$teller_only = false;
+		if (in_array($value["team_thuis"], $teams_with_teller_only)) {
+			$teller_only = true;
+		}
 
 		?>
 			<tr>
@@ -23,7 +33,11 @@ function render_wedstrijden($wedstrijden, $wedstrijd_op_veld) {
 				<td width="30%" class="naam" title="<?= $value['code'] ?>"><?=$value['team_thuis'] ?> - <?= $value['team_uit']?></td>
 				<td width="50px" class="datum"><?=(new DateTime($value['datum']))->format('G:i')?></td>
 				<td width="200px" class="teller"><?= $teller ?></td>
-				<td width="200px" class="scheidsrechter"><?= $scheidsrechter ?></td>
+				<?php if (!$teller_only) : ?>
+					<td width="200px" class="scheidsrechter"><?= $second_referee ? "Tweede scheidsrechter<br>" : null ?><?= $scheidsrechter ?></td>
+				<?php else: ?>
+					<td width="200px"></td>
+				<?php endif; ?>
 			</tr>
 
 		<?php
@@ -54,7 +68,7 @@ function get_all_teams($wedstrijden){
 	return array_unique(array_merge($databaseTeams, $wedstrijdenTeams));
 }
 
-function render_tabel($wedstrijden) {
+function render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_teller_only) {
 
 	$groupedData = array_reduce($wedstrijden, function ($result, $item) {
 		$date = new DateTime($item['datum']);
@@ -123,7 +137,7 @@ function render_tabel($wedstrijden) {
 							<?php endif ?>
 							<tbody>
 					
-								<?= render_wedstrijden($wedstrijden, $wedstrijd_op_veld) ?>
+								<?= render_wedstrijden($wedstrijden, $wedstrijd_op_veld, $teams_with_second_referees, $teams_with_teller_only) ?>
 							
 							</tbody>
 						</table>

@@ -16,6 +16,7 @@ require_once(dirname(__FILE__) . '/render.php');
 require_once(dirname(__FILE__) . '/handlers.php');
 require_once(dirname(__FILE__) . '/database.php');
 require_once(dirname(__FILE__) . '/speeldag/speeldag-functions.php');
+require_once(dirname(__FILE__) . '/teamtaken/teamtaken-functions.php');
 
 register_activation_hook(__FILE__, 'activate_wedstrijd_planner');
 
@@ -42,7 +43,12 @@ add_action('admin_enqueue_scripts', 'wedstrijd_planner_admin_files');
 // Speeldag template
 register_activation_hook(__FILE__, 'create_speeldag_page');
 register_deactivation_hook(__FILE__, 'disable_speeldag_page');
-add_filter('page_template', 'load_custom_plugin_template');
+add_filter('page_template', 'load_speeldag_plugin_template');
+
+// Teamtaken template
+register_activation_hook(__FILE__, 'create_teamtaken_page');
+register_deactivation_hook(__FILE__, 'disable_teamtaken_page');
+add_filter('page_template', 'load_teamtaken_plugin_template');
 
 function fetch_wedstrijden() {
 	require_once(dirname(__FILE__) . '/SimpleXLSX.php');
@@ -109,6 +115,8 @@ function wedstrijd_planner_init(){
 	handle_verwijder_rode_bolletjes();
 
 	$exclude_poules = get_entries("poule", "wedstrijd_planner_exclude_poules");
+	$teams_with_second_referees = get_entries("team", "wedstrijd_planner_second_referee");
+	$teams_with_teller_only = get_entries("team", "wedstrijd_planner_teller_only");
 
 	$alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules);
 
@@ -134,7 +142,7 @@ function wedstrijd_planner_init(){
 	
 	echo '<div class="wrap plugin_container">';
 
-	render_tabel($wedstrijden);
+	render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_teller_only);
 
 
 	render_sidebar($wedstrijden);
