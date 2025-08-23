@@ -85,6 +85,9 @@ function group_by_dynamic_half_year(array $items) {
     $grouped = [];
     
     foreach ($items as $item) {
+
+		$item = (array)$item;
+
         $date = new DateTime($item["datum"]);
         $year = (int)$date->format('Y');
         $month = (int)$date->format('n');
@@ -104,6 +107,14 @@ function group_by_dynamic_half_year(array $items) {
     return $grouped;
 }
 
+function get_current_half_year() {
+    $currentMonth = (int)date('n');
+    $currentYear = (int)date('Y');
+    
+    $halfYear = ($currentMonth <= 6) ? 1 : 2;
+    
+    return $currentYear . "-" . $halfYear;
+}
 
 
 function wedstrijd_planner_init(){
