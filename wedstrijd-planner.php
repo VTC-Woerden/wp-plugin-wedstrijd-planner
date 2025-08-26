@@ -16,7 +16,7 @@ require_once(dirname(__FILE__) . '/render.php');
 require_once(dirname(__FILE__) . '/handlers.php');
 require_once(dirname(__FILE__) . '/database.php');
 require_once(dirname(__FILE__) . '/speeldag/speeldag-functions.php');
-require_once(dirname(__FILE__) . '/teamtaken/teamtaken-functions.php');
+require_once(dirname(__FILE__) . '/zaaltaken/zaaltaken-functions.php');
 
 register_activation_hook(__FILE__, 'activate_wedstrijd_planner');
 
@@ -45,10 +45,10 @@ register_activation_hook(__FILE__, 'create_speeldag_page');
 register_deactivation_hook(__FILE__, 'disable_speeldag_page');
 add_filter('page_template', 'load_speeldag_plugin_template');
 
-// Teamtaken template
-register_activation_hook(__FILE__, 'create_teamtaken_page');
-register_deactivation_hook(__FILE__, 'disable_teamtaken_page');
-add_filter('page_template', 'load_teamtaken_plugin_template');
+// zaaltaken template
+register_activation_hook(__FILE__, 'create_zaaltaken_page');
+register_deactivation_hook(__FILE__, 'disable_zaaltaken_page');
+add_filter('page_template', 'load_zaaltaken_plugin_template');
 
 function fetch_wedstrijden() {
 	require_once(dirname(__FILE__) . '/SimpleXLSX.php');
@@ -107,7 +107,7 @@ function group_by_dynamic_half_year(array $items) {
     return $grouped;
 }
 
-function get_current_half_year() {
+function get_current_half_year(): string {
     $currentMonth = (int)date('n');
     $currentYear = (int)date('Y');
     
@@ -145,7 +145,7 @@ function wedstrijd_planner_init(){
 
 	$wedstrijdenSeizoenen = group_by_dynamic_half_year($alleWedstrijden);
 
-	$activeSeason = $_GET['season'] ?? array_key_last($wedstrijdenSeizoenen);
+	$activeSeason = $_GET['season'] ?? get_current_half_year($wedstrijdenSeizoenen);
 
 	$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
 

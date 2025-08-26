@@ -87,11 +87,6 @@ function render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_tel
 
 	<div class="section wedstrijden">
 
-		<form method="POST" id="verwijder_rode_bolletjes">
-			<?php wp_nonce_field(-1, 'verwijder_rode_bolletjes_nonce') ?>
-			<input type="submit" name="verwijder_rode_bolletjes" class="button button-primary" value="Haal rode bolletjes weg"/>
-		</form>
-
 		<?php foreach ($groupedData as $datum => $wedstrijd_dagen): 
 			
 			$groupedDataField = array_reduce($wedstrijd_dagen, function ($result, $item) {
@@ -176,10 +171,9 @@ function render_sidebar($wedstrijden) {
 			</form>
 
 			<div>
-				<h3>Vernieuw wedstrijd data</h3>
 				<form method="POST" id="vernieuw_wedstrijden_form">
 					<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
-					<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Vernieuw"/>
+					<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Venieuw wedstrijden"/>
 				</form>
 			</div>
 		</div>
@@ -252,9 +246,13 @@ function render_header($wedstrijdenSeizoenen) {
 			<div class="legenda">
 				<h3>Legenda</h3>
 				<div>
-
 					<span class="icon-veranderd"></span> = De wedstrijd heeft een wijziging gehad
 				</div>
+
+				<form method="POST" id="verwijder_rode_bolletjes">
+					<?php wp_nonce_field(-1, 'verwijder_rode_bolletjes_nonce') ?>
+					<input type="submit" name="verwijder_rode_bolletjes" class="button button-primary" value="Wijzigingen gezien"/>
+				</form>
 			</div>
 		</div>
 	<?php

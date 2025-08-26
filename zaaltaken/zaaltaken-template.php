@@ -1,9 +1,14 @@
 <?php
 /**
- * Template Name: Teamtakenlijst page
+ * Template Name: zaaltakenlijst page
  */
 
-$team = $_GET['team'];
+if (!isset($_GET['team'])) {
+    echo "Geef een team mee in de query parameter";
+    return;
+}
+
+$team = sanitize_text_field($_GET['team']);
 
 $taken = (array)fetch_database_wedstrijden_for_team($team);
 
