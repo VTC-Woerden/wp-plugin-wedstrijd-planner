@@ -1,9 +1,14 @@
 <?php
 /**
- * Template Name: Speeldag page
+ * Template Name: wedstrijddag page
  */
 
-$date = '2025-09-12';
+if (!isset($_GET['datum'])) {
+    echo "Geef een datum mee in de query parameter";
+    return;
+}
+
+$date = sanitize_text_field($_GET['datum']);
 
 $wedstrijden = fetch_database_wedstrijden($date);
 

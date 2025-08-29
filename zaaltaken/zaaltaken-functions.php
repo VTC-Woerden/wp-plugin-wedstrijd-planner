@@ -1,5 +1,7 @@
 <?php 
 
+require_once(dirname(__FILE__) . '/shortcode.php');
+
 function create_zaaltaken_page() {
     // Check if page already exists
     $page_title = 'zaaltaken';
@@ -44,3 +46,4 @@ function load_zaaltaken_plugin_template($template) {
     
     return $template;
 }
+

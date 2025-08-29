@@ -15,7 +15,7 @@ require_once(dirname(__FILE__) . '/settings-page.php');
 require_once(dirname(__FILE__) . '/render.php');
 require_once(dirname(__FILE__) . '/handlers.php');
 require_once(dirname(__FILE__) . '/database.php');
-require_once(dirname(__FILE__) . '/speeldag/speeldag-functions.php');
+require_once(dirname(__FILE__) . '/wedstrijddag/wedstrijddag-functions.php');
 require_once(dirname(__FILE__) . '/zaaltaken/zaaltaken-functions.php');
 
 register_activation_hook(__FILE__, 'activate_wedstrijd_planner');
@@ -40,10 +40,10 @@ function wedstrijd_planner_admin_files() {
 }
 add_action('admin_enqueue_scripts', 'wedstrijd_planner_admin_files');
 
-// Speeldag template
-register_activation_hook(__FILE__, 'create_speeldag_page');
-register_deactivation_hook(__FILE__, 'disable_speeldag_page');
-add_filter('page_template', 'load_speeldag_plugin_template');
+// wedstrijddag template
+register_activation_hook(__FILE__, 'create_wedstrijddag_page');
+register_deactivation_hook(__FILE__, 'disable_wedstrijddag_page');
+add_filter('page_template', 'load_wedstrijddag_plugin_template');
 
 // zaaltaken template
 register_activation_hook(__FILE__, 'create_zaaltaken_page');
@@ -125,7 +125,7 @@ function wedstrijd_planner_init(){
 	handle_vernieuw_wedstrijden();
 	handle_verwijder_rode_bolletjes();
 
-	$exclude_poules = get_entries("poule", "wedstrijd_planner_exclude_poules");
+	$exclude_poules = get_entries("poule", tableName: "wedstrijd_planner_exclude_poules");
 	$teams_with_second_referees = get_entries("team", "wedstrijd_planner_second_referee");
 	$teams_with_teller_only = get_entries("team", "wedstrijd_planner_teller_only");
 
