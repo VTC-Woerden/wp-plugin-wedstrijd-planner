@@ -119,6 +119,7 @@ function upsert_row_into_wedstrijd_planner($data) {
         ));
 
         if ($existing_row) {
+
             // Row exists, update only the specified fields
             $updatedCount = $wpdb->update($table_name, $data, array($primary_key => $primary_key_value));
 
@@ -262,13 +263,15 @@ function fetch_database_wedstrijden_for_team($team) {
     // Define the table name (with WordPress prefix)
     $table_name = get_wedstrijd_planner_table_name();
 
-    // Base query
-    $results = $wpdb->get_results(
-        $wpdb->prepare(
+    $query = $wpdb->prepare(
             "SELECT * FROM $table_name WHERE teller = %s OR scheidsrechter = %s",
             $team,
             $team
-        )
+    );
+
+    // Base query
+    $results = $wpdb->get_results(
+        $query
     );
 
     return $results;

@@ -26,9 +26,16 @@
 }
 
 .sidebar {
-    flex-basis: 300px;
+    position: fixed;
+    top: 52px;
+    right: 0;
+    width: 200px;
     height: fit-content;
     margin-left: 20px;
+}
+
+.sidebar-filler {
+    flex-basis: 200px;
 }
 
 .sidebar h3 {
@@ -42,6 +49,11 @@
 .sidebar .taken .team {
     display: flex;
     justify-content: space-between;
+    height: 30px;
+}
+
+.sidebar .taken .team td {
+    line-height: 15px;
 }
 
 .settings_form textarea {
@@ -68,6 +80,7 @@
     background-color: #1dff1d;
 }
 
-#save_wedstrijden_form {
-    margin-bottom: 20px;
+.flex-spread {
+    display: flex;
+    justify-content: space-between;
 }

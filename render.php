@@ -31,12 +31,12 @@ function render_wedstrijden($wedstrijden, $wedstrijd_op_veld, $teams_with_second
 					?>
 				</td>
 				<td width="30%" class="naam" title="<?= $value['code'] ?>"><?=$value['team_thuis'] ?> - <?= $value['team_uit']?></td>
-				<td width="50px" class="datum"><?=(new DateTime($value['datum']))->format('G:i')?></td>
-				<td width="200px" class="teller"><?= $teller ?></td>
+				<td width="30px" class="datum"><?=(new DateTime($value['datum']))->format('G:i')?></td>
+				<td width="130px" class="teller"><?= $teller ?></td>
 				<?php if (!$teller_only) : ?>
-					<td width="200px" class="scheidsrechter"><?= $second_referee ? "Tweede scheidsrechter<br>" : null ?><?= $scheidsrechter ?></td>
+					<td width="130px" class="scheidsrechter"><?= $second_referee ? "Tweede scheidsrechter<br>" : null ?><?= $scheidsrechter ?></td>
 				<?php else: ?>
-					<td width="200px"></td>
+					<td width="130px"></td>
 				<?php endif; ?>
 			</tr>
 
@@ -68,7 +68,7 @@ function get_all_teams($wedstrijden){
 	return array_unique(array_merge($databaseTeams, $wedstrijdenTeams));
 }
 
-function render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_teller_only) {
+function render_tabel($wedstrijden, $wedstrijdenSeizoenen, $teams_with_second_referees, $teams_with_teller_only) {
 
 	$groupedData = array_reduce($wedstrijden, function ($result, $item) {
 		$date = new DateTime($item['datum']);
@@ -82,64 +82,67 @@ function render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_tel
 		
 		return $result;
 	}, []);
-
 	?>
 
-	<div class="section wedstrijden">
+	<div class="wedstrijden">
 
-		<?php foreach ($groupedData as $datum => $wedstrijd_dagen): 
-			
-			$groupedDataField = array_reduce($wedstrijd_dagen, function ($result, $item) {
-				$veld = $item['veld'];
+		<?= render_header($wedstrijdenSeizoenen); ?>
+
+		<div class="section">
+			<?php foreach ($groupedData as $datum => $wedstrijd_dagen): 
 				
-				if (!isset($result[$veld])) {
-					$result[$veld] = [];
-				}
-				
-				$result[$veld][] = $item;
-				
-				return $result;
-			}, []);
-
-			ksort($groupedDataField);
-
-			$firstWestrijd = true;
-
-		?>
-			<div class="wedstrijd_dag">
-				<h1>
-					<?php
-						$formatter = new IntlDateFormatter('nl-NL', IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
-						$formatter->setPattern('EEEE d LLLL yyyy');
-						echo $formatter->format(new DateTime($datum));
-					?>
-				</h1>
-
-				<?php foreach ($groupedDataField as $veld => $wedstrijd_op_veld): ?>
-					<div class="wedstrijd_veld">
-						<div>Veld <?= $veld ?></div>
-						<table class="wedstrijden_tabel widefat striped fixed">
-							<?php if ($firstWestrijd): $firstWestrijd = false; ?>
-								<thead>
-									<tr>
-										<th width="10px" class="veranderd"></th>
-										<th width="30%" class="wedstrijd">Wedstrijd</th>
-										<th width="50px" class="datum">Tijd</th>
-										<th width="200px" class="teller">Teller</th>
-										<th width="200px" class="scheidsrechter">Scheidsrechter</th>
-									</tr>
-								</thead>
-							<?php endif ?>
-							<tbody>
+				$groupedDataField = array_reduce($wedstrijd_dagen, function ($result, $item) {
+					$veld = $item['veld'];
 					
-								<?= render_wedstrijden($wedstrijden, $wedstrijd_op_veld, $teams_with_second_referees, $teams_with_teller_only) ?>
-							
-							</tbody>
-						</table>
-					</div>
-				<?php endforeach; ?>
-			</div>
-		<?php endforeach; ?>
+					if (!isset($result[$veld])) {
+						$result[$veld] = [];
+					}
+					
+					$result[$veld][] = $item;
+					
+					return $result;
+				}, []);
+
+				ksort($groupedDataField);
+
+				$firstWestrijd = true;
+
+			?>
+				<div class="wedstrijd_dag">
+					<h1>
+						<?php
+							$formatter = new IntlDateFormatter('nl-NL', IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+							$formatter->setPattern('EEEE d LLLL yyyy');
+							echo $formatter->format(new DateTime($datum));
+						?>
+					</h1>
+
+					<?php foreach ($groupedDataField as $veld => $wedstrijd_op_veld): ?>
+						<div class="wedstrijd_veld">
+							<div>Veld <?= $veld ?></div>
+							<table class="wedstrijden_tabel widefat striped fixed">
+								<?php if ($firstWestrijd): $firstWestrijd = false; ?>
+									<thead>
+										<tr>
+											<th width="10px" class="veranderd"></th>
+											<th width="30%" class="wedstrijd">Wedstrijd</th>
+											<th width="30px" class="datum">Tijd</th>
+											<th width="130px" class="teller">Teller</th>
+											<th width="130px" class="scheidsrechter">Scheidsrechter</th>
+										</tr>
+									</thead>
+								<?php endif ?>
+								<tbody>
+						
+									<?= render_wedstrijden($wedstrijden, $wedstrijd_op_veld, $teams_with_second_referees, $teams_with_teller_only) ?>
+								
+								</tbody>
+							</table>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
 	</div>
 	<?php
 }
@@ -149,9 +152,12 @@ function render_sidebar($wedstrijden) {
 		$wedstrijden = [];
 	}
 	?>
+		<div class="sidebar-filler">
+
+		</div>
 		<div class="sidebar section">
 			<div>
-				<h3>Taken overzicht</h3>
+				<h3>Takenoverzicht</h3>
 
 				<table class="taken widefat striped fixed">
 					<?php foreach(get_all_teams($wedstrijden) as $key=>$value): ?>
@@ -169,13 +175,6 @@ function render_sidebar($wedstrijden) {
 				<input type="hidden" id="wedstrijd_data" name="wedstrijd_data">
 				<input type="submit" name="save_wedstrijden" class="button button-primary" value="Opslaan"/>
 			</form>
-
-			<div>
-				<form method="POST" id="vernieuw_wedstrijden_form">
-					<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
-					<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Venieuw wedstrijden"/>
-				</form>
-			</div>
 		</div>
 	<?php
 }
@@ -234,7 +233,7 @@ HTML;
 
 function render_header($wedstrijdenSeizoenen) {
 	?>
-		<div class="section wrap">
+		<div class="section">
 			<h1>Wedstrijd planner</h1>
 
 			<h3>Seizoenen</h3>
@@ -243,16 +242,24 @@ function render_header($wedstrijdenSeizoenen) {
 				<a href="<?= $_SERVER['REQUEST_URI'].'&season='. $season ?>"><?= $season ?></a>
 			<?php endforeach; ?>
 
+			
+
 			<div class="legenda">
 				<h3>Legenda</h3>
 				<div>
 					<span class="icon-veranderd"></span> = De wedstrijd heeft een wijziging gehad
 				</div>
 
-				<form method="POST" id="verwijder_rode_bolletjes">
-					<?php wp_nonce_field(-1, 'verwijder_rode_bolletjes_nonce') ?>
-					<input type="submit" name="verwijder_rode_bolletjes" class="button button-primary" value="Wijzigingen gezien"/>
-				</form>
+				<div class="flex-spread">
+					<form method="POST" id="verwijder_rode_bolletjes">
+						<?php wp_nonce_field(-1, 'verwijder_rode_bolletjes_nonce') ?>
+						<input type="submit" name="verwijder_rode_bolletjes" class="button button-primary" value="Wijzigingen gezien"/>
+					</form>
+					<form method="POST" id="vernieuw_wedstrijden_form">
+						<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
+						<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Venieuw wedstrijden"/>
+					</form>
+				</div>
 			</div>
 		</div>
 	<?php

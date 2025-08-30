@@ -47,7 +47,7 @@ function render_wedstrijd($wedstrijden, $veld) {
                 </div>
                 <div class="taken">
                     <?php if (!$teller_only) : ?>
-                        <span><?= $second_referee ? "Tweede scheidsrechter" : "Fluiten" ?> <b><?= $wedstrijd['scheidsrechter'] ?></b></span> -
+                        <span><?= $second_referee ? "Fluiten (2ᵉ)" : "Fluiten" ?> <b><?= $wedstrijd['scheidsrechter'] ?></b></span> -
                     <?php endif; ?>
                     <span>Tellen <b><?= $wedstrijd['teller'] ?></b></span>
                 </div>

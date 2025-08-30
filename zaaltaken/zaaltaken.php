@@ -62,7 +62,7 @@ function RenderZaaltaken($team) {
                                 <tr>
                                     <td><div><?= $datum ?></div></td>
                                     <td><div><?= $tijd ?></div></td>
-                                    <td><div><?= $second_referee ? "Tweede scheids" : "Fluiten" ?> bij <?= $taak["team_thuis"] ?></div></td>
+                                    <td><div><?= $second_referee ? "Fluiten (2ᵉ)" : "Fluiten" ?> bij <?= $taak["team_thuis"] ?></div></td>
                                 </tr>
                             <?php
                         }

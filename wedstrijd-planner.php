@@ -149,12 +149,9 @@ function wedstrijd_planner_init(){
 
 	$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
 
-	render_header($wedstrijdenSeizoenen);
-	
 	echo '<div class="wrap plugin_container">';
 
-	render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_teller_only);
-
+	render_tabel($wedstrijden, $wedstrijdenSeizoenen, $teams_with_second_referees, $teams_with_teller_only);
 
 	render_sidebar($wedstrijden);
 

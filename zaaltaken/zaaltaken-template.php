@@ -10,6 +10,6 @@ if (!isset($_GET['team'])) {
     return;
 }
 
-$team = sanitize_text_field($_GET['team']);
+$team = urldecode(sanitize_text_field($_GET['team']));
 
 RenderZaaltaken($team);
