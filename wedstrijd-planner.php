@@ -17,6 +17,7 @@ require_once(dirname(__FILE__) . '/handlers.php');
 require_once(dirname(__FILE__) . '/database.php');
 require_once(dirname(__FILE__) . '/wedstrijddag/wedstrijddag-functions.php');
 require_once(dirname(__FILE__) . '/zaaltaken/zaaltaken-functions.php');
+require_once(dirname(__FILE__) . '/weekschema/weekschema-functions.php');
 
 register_activation_hook(__FILE__, 'activate_wedstrijd_planner');
 
@@ -49,6 +50,11 @@ add_filter('page_template', 'load_wedstrijddag_plugin_template');
 register_activation_hook(__FILE__, 'create_zaaltaken_page');
 register_deactivation_hook(__FILE__, 'disable_zaaltaken_page');
 add_filter('page_template', 'load_zaaltaken_plugin_template');
+
+// weekschema template
+register_activation_hook(__FILE__, 'create_weekschema_page');
+register_deactivation_hook(__FILE__, 'disable_weekschema_page');
+add_filter('page_template', 'load_weekschema_plugin_template');
 
 function fetch_wedstrijden() {
 	require_once(dirname(__FILE__) . '/SimpleXLSX.php');
@@ -149,12 +155,9 @@ function wedstrijd_planner_init(){
 
 	$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
 
-	render_header($wedstrijdenSeizoenen);
-	
 	echo '<div class="wrap plugin_container">';
 
-	render_tabel($wedstrijden, $teams_with_second_referees, $teams_with_teller_only);
-
+	render_tabel($wedstrijden, $wedstrijdenSeizoenen, $teams_with_second_referees, $teams_with_teller_only);
 
 	render_sidebar($wedstrijden);
 

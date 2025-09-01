@@ -9,18 +9,18 @@ body {
     margin: 0;
 }
 
-.wedstrijddag-container {
+.weekschema-container {
     position: relative;
     width: 100vw;
     height: 100vh;
 }
 
-.wedstrijddag {
+.weekschema {
     container-type: inline-size;
     padding: 5px;
 }
 
-.wedstrijddag > h1 {
+.weekschema > h1 {
     font-size: 2cqw;
     text-align: center;
 }

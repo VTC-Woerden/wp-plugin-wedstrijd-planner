@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: wedstrijddag page
+ * Template Name: weekschema page
  */
 
 if (!isset($_GET['datum'])) {
@@ -68,8 +68,8 @@ foreach ($wedstrijden as $wedstrijd) {
 ?>
 
 <link rel="stylesheet" href="<?php echo plugins_url('style.css', __FILE__); ?>" type="text/css" media="all" />
-<div class="wedstrijddag-container">
-    <div class="wedstrijddag">
+<div class="weekschema-container">
+    <div class="weekschema">
         <h1>
             <?php
                 $formatter = new IntlDateFormatter('nl-NL', IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
