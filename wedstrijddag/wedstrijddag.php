@@ -46,11 +46,7 @@ function render_wedstrijd($wedstrijden, $veld) {
 
 
 function RenderWedstrijddag($date) {
-
-
     $wedstrijden = fetch_database_wedstrijden($date);
-
-
 
     $hasH1Field = false;
 

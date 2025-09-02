@@ -10,6 +10,19 @@ if (!isset($_GET['team'])) {
     return;
 }
 
-$team = urldecode(sanitize_text_field($_GET['team']));
+?>
 
-RenderZaaltaken($team);
+<div class="zaaltaken-template">
+
+    <?php
+        $team = urldecode(sanitize_text_field($_GET['team']));
+    ?>
+        <h1>
+            Zaaltaken <?= esc_html($team) ?>
+        </h1>
+    <?php
+        RenderZaaltaken($team);
+    ?>
+
+</div>
+

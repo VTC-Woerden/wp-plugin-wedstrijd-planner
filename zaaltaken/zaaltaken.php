@@ -1,12 +1,21 @@
 <?php
 
 function RenderZaaltaken($team) {
+
+    $team = str_replace('-', ' ', $team);
+
     $taken = (array)fetch_database_wedstrijden_for_team($team);
+
+    usort($taken, function($a, $b) {
+        $dateA = new DateTime($a->datum);
+        $dateB = new DateTime($b->datum);
+        return $dateA <=> $dateB;
+    });
 
     $taakSeizoenen = group_by_dynamic_half_year(((array)$taken));
 
     if (!array_key_exists(get_current_half_year(), $taakSeizoenen)) {
-        echo "Geen taken gevonden";
+        echo "Geen taken gevonden.";
         return;
     }
 
@@ -16,9 +25,7 @@ function RenderZaaltaken($team) {
     <link rel="stylesheet" href="<?php echo plugins_url('style.css', __FILE__); ?>" type="text/css" media="all" />
 
     <div class="zaaltaken">
-        <h1>
-            Zaaltaken <?= $team ?>
-        </h1>
+
 
         <table>
             <thead>
@@ -38,8 +45,8 @@ function RenderZaaltaken($team) {
                             $second_referee = true;
                         }
 
-                        $moetTellen = $taak["teller"] == $team ? true : false;
-                        $moetScheidsen = $taak["scheidsrechter"] == $team ? true : false;
+                        $moetTellen = strtolower($taak["teller"] ?? "") == strtolower($team ?? "") ? true : false;
+                        $moetScheidsen = strtolower($taak["scheidsrechter"] ?? "") == strtolower($team ?? "") ? true : false;
 
                         $formatter = new IntlDateFormatter('nl-NL', IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
                         $formatter->setPattern('EEEE d LLLL');
