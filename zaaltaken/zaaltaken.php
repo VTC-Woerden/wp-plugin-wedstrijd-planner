@@ -1,3 +1,6 @@
+<script>
+    window.print();
+</script>
 <?php
 
 function RenderZaaltaken($team) {

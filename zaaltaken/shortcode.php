@@ -14,5 +14,10 @@ function zaaltaken_shortcode() {
 
     ob_start(); // start a buffer
     RenderZaaltaken($team);
+
+    ?>
+        <a href="/zaaltaken/?team=<?= $team ?>">Print</a>
+    <?php
+
     return ob_get_clean(); // get the buffer contents and clean it
 }
