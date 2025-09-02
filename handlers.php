@@ -19,7 +19,6 @@ function handle_verwijder_rode_bolletjes() {
 function handle_vernieuw_wedstrijden() {
 	if(isset($_POST['vernieuw_wedstrijden_nonce']) && wp_verify_nonce($_POST['vernieuw_wedstrijden_nonce'])) {
 		$nieuweWedstrijden = fetch_wedstrijden();
-
 		
 		$nieuweWedstrijdenInDeToekomst = array_filter($nieuweWedstrijden, function($wedstrijd) {
 			return new DateTime($wedstrijd["datum"]) > new DateTime();
