@@ -5,6 +5,10 @@
 
 require_once(dirname(__FILE__) . '/../wedstrijddag/wedstrijddag.php');
 
+?>
+    <link rel="stylesheet" href="<?php echo plugins_url('style.css', __FILE__); ?>" type="text/css" media="all" />
+<?php
+
 if (isset($_GET['weeknummer'])) {
     $weeknummer = sanitize_text_field($_GET['weeknummer']);
 } else {
@@ -23,9 +27,16 @@ if (!key_exists($weeknummer, $groupedByWeek)) {
 
 $dates = getDatesByWeek($groupedByWeek[$weeknummer]);
 
-foreach($dates as $date) {
-    RenderWedstrijddag($date);
-}
+
+?>
+    <div class="weekschema">
+        <?php foreach($dates as $date): ?>
+            <div class="weekschema-container">
+                <?= RenderWedstrijddag($date); ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php
 
 function getDatesByWeek($groupedByWeek){
     $uniqueDates = [];

@@ -1,0 +1,17 @@
+.weekschema {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
+}
+
+@media (max-width: 1450px) {
+    .weekschema {
+        grid-template-columns: 1fr;
+        grid-gap: 50px;
+    }
+}
+
+.weekschema-container {
+    width: 100%;
+    height: 100%;
+}
