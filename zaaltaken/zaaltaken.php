@@ -1,9 +1,15 @@
-<script>
-    window.print();
-</script>
+
 <?php
 
 function RenderZaaltaken($team) {
+
+    if (isset($_GET["print"])) {
+        ?>
+            <script>
+                window.print();
+            </script>
+        <?php
+    }
 
     $team = str_replace('-', ' ', $team);
 

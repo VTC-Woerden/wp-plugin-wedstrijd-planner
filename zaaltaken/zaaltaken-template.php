@@ -26,3 +26,5 @@ if (!isset($_GET['team'])) {
 
 </div>
 
+<?php
+
