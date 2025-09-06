@@ -1,6 +1,4 @@
-
 <?php
-
 function RenderZaaltaken($team) {
 
     if (isset($_GET["print"])) {
@@ -87,7 +85,4 @@ function RenderZaaltaken($team) {
             </tbody>
         </table>
     </div>
-
-    <?php
-
-}
+<?php }

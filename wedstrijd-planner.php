@@ -4,7 +4,6 @@
  * Plugin Name: VTC wedstrijd planner
  */
 
-
 add_action('admin_menu', 'wedstrijd_planner_plugin_setup_menu');
  
 function wedstrijd_planner_plugin_setup_menu(){
@@ -19,7 +18,21 @@ require_once(dirname(__FILE__) . '/wedstrijddag/wedstrijddag-functions.php');
 require_once(dirname(__FILE__) . '/zaaltaken/zaaltaken-functions.php');
 require_once(dirname(__FILE__) . '/weekschema/weekschema-functions.php');
 
-register_activation_hook(__FILE__, 'activate_wedstrijd_planner');
+register_activation_hook(__FILE__, 'activate_wedstrijdplanner_plugin');
+register_deactivation_hook(__FILE__, 'deactivate_wedstrijdplanner_plugin');
+
+function activate_wedstrijdplanner_plugin() {
+	activate_wedstrijd_planner();
+	create_wedstrijddag_page();
+	create_zaaltaken_page();
+	create_weekschema_page();
+}
+
+function deactivate_wedstrijdplanner_plugin() {
+	disable_wedstrijddag_page();
+	disable_zaaltaken_page();
+	disable_weekschema_page();
+}
 
 // Register styles
 function wedstrijd_planner_admin_files() {
@@ -42,18 +55,12 @@ function wedstrijd_planner_admin_files() {
 add_action('admin_enqueue_scripts', 'wedstrijd_planner_admin_files');
 
 // wedstrijddag template
-register_activation_hook(__FILE__, 'create_wedstrijddag_page');
-register_deactivation_hook(__FILE__, 'disable_wedstrijddag_page');
 add_filter('page_template', 'load_wedstrijddag_plugin_template');
 
 // zaaltaken template
-register_activation_hook(__FILE__, 'create_zaaltaken_page');
-register_deactivation_hook(__FILE__, 'disable_zaaltaken_page');
 add_filter('page_template', 'load_zaaltaken_plugin_template');
 
 // weekschema template
-register_activation_hook(__FILE__, 'create_weekschema_page');
-register_deactivation_hook(__FILE__, 'disable_weekschema_page');
 add_filter('page_template', 'load_weekschema_plugin_template');
 
 function fetch_wedstrijden() {
@@ -141,7 +148,7 @@ function wedstrijd_planner_init(){
 		?>
 			<h3>Geen wedstrijden gevonden. Klik hieronder om wedstrijden op te halen.</h3>
 			<form method="POST" id="vernieuw_wedstrijden_form">
-				<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
+				<?php //wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
 				<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Haal wedstrijden op"/>
 			</form>
 		<?php
@@ -163,5 +170,3 @@ function wedstrijd_planner_init(){
 
 	echo '</div>';
 }
-
-
