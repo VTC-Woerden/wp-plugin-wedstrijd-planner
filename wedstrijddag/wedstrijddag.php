@@ -98,7 +98,7 @@ function RenderWedstrijddag($date) {
 
                     <?php if ($hasH1Field): ?>
 
-                        <h1>Veld H1</h1>
+                        <h1>Hoofdveld</h1>
                         <div>
                             <?php
                                 render_wedstrijd($wedstrijden, "H1");
