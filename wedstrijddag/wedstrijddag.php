@@ -56,7 +56,6 @@ function RenderWedstrijddag($date) {
             break;
         }
     }
-
     ?>
 
     <link rel="stylesheet" href="<?php echo plugins_url('style.css', __FILE__); ?>" type="text/css" media="all" />

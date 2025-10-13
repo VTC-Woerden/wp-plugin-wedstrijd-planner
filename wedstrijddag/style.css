@@ -27,10 +27,10 @@ body {
 
 .velden {
     display: grid;
-    grid-template-columns: 6cqw repeat(2, 3fr);
-    grid-template-rows: repeat(2, 3fr) 6cqw;
+    grid-template-columns: 4cqw repeat(2, 3fr);
+    grid-template-rows: repeat(2, 3fr) 4cqw;
     grid-gap: 1cqw;
-    font-size: 1cqw;
+    font-size: 1.2cqw;
 }
 
 .kantine {  
@@ -39,21 +39,21 @@ body {
     color: rgb(21, 95, 163);
     writing-mode: vertical-rl;
     text-align: center;
-    line-height: 6cqw;
+    line-height: 4cqw;
     font-size: 1.5cqw;
 }
 
 .veld {
     width: 100%;
-    height: 20cqw;
+    min-height: 20cqw;
     background-color: white;
     padding: 0cqw 1cqw;
     border: .3cqw solid #464646;
-    font-size: 1.1cqw;
+    font-size: 1.4cqw;
 }
 
 .veld h1 {
-    font-size: 1.4cqw;
+    font-size: 1.6cqw;
     line-height: 1.4cqw;
     margin: .5cqw 0cqw;
 }
@@ -79,7 +79,7 @@ body {
     background-color: #bbbbbb;
     color: rgb(21, 95, 163);
     text-align: center;
-    line-height: 6cqw;
+    line-height: 4cqw;
     font-size: 1.5cqw;
 }
 

@@ -29,6 +29,7 @@ $dates = getDatesByWeek($groupedByWeek[$weeknummer]);
 
 
 ?>
+    <img class="logo" src="https://vtcwoerden.nl/wp-content/uploads/2022/09/VTC-logo-nieuw-blauw.jpg" alt="VTC Woerden">
     <div class="weekschema">
         <?php foreach($dates as $date): ?>
             <div class="weekschema-container">
