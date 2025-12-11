@@ -15,6 +15,12 @@ if (isset($_GET['weeknummer'])) {
     $weeknummer = date('W');
 }
 
+if (isset($_GET['columns'])) {
+    $columns = sanitize_text_field($_GET['columns']);
+} else {
+    $columns = "2";
+}
+
 $exclude_poules = get_entries("poule", tableName: "wedstrijd_planner_exclude_poules");
 $alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules);
 
@@ -27,10 +33,9 @@ if (!key_exists($weeknummer, $groupedByWeek)) {
 
 $dates = getDatesByWeek($groupedByWeek[$weeknummer]);
 
-
 ?>
     <img class="logo" src="https://vtcwoerden.nl/wp-content/uploads/2022/09/VTC-logo-nieuw-blauw.jpg" alt="VTC Woerden">
-    <div class="weekschema">
+    <div class="weekschema" <?= "style='grid-template-columns: repeat($columns, 1fr)'" ?>>
         <?php foreach($dates as $date): ?>
             <div class="weekschema-container">
                 <?= RenderWedstrijddag($date); ?>
