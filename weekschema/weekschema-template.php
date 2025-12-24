@@ -15,6 +15,12 @@ if (isset($_GET['weeknummer'])) {
     $weeknummer = date('W');
 }
 
+if (isset($_GET['jaar'])) {
+    $jaar = sanitize_text_field($_GET['jaar']);
+} else {
+    $jaar = date('Y');
+}
+
 if (isset($_GET['columns'])) {
     $columns = sanitize_text_field($_GET['columns']);
 } else {
@@ -22,7 +28,8 @@ if (isset($_GET['columns'])) {
 }
 
 $exclude_poules = get_entries("poule", tableName: "wedstrijd_planner_exclude_poules");
-$alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules);
+$alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules, $jaar);
+
 
 $groupedByWeek = groupByWeek($alleWedstrijden);
 
@@ -62,7 +69,7 @@ function groupByWeek($objects) {
         }
         
         $date = new DateTime($object["datum"]);
-        $weekNumber = $date->format('W');
+        $weekNumber = (string)(int) $date->format('W');
         
         if (!isset($grouped[$weekNumber])) {
             $grouped[$weekNumber] = [];

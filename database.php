@@ -183,7 +183,7 @@ function remove_all_veranderd_statuses() {
     $wpdb->query("UPDATE $table_name SET veranderd = 0");
 }
 
-function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null) {
+function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null, $year = null) {
 	global $wpdb;
 
     // Define the table name (with WordPress prefix)
@@ -212,6 +212,11 @@ function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null)
 
         $where_clauses[] = "poule NOT IN ($exclude_poules)";
     }
+
+    if ($year !== null) {
+        $where_clauses[] = "YEAR(datum) = %s";
+        $query_params[] = $year;
+    }
     
     // Combine where clauses if any exist
     if (!empty($where_clauses)) {
@@ -236,7 +241,7 @@ function fetch_database_wedstrijden($filter_date = null, $exclude_poules = null)
         foreach ($results as $row) {
 
 			array_push($wedstrijden, 
-		array(
+		        array(
 					'code' => $row->code,
 					'team_thuis' => $row->team_thuis, 
 					'team_uit' => $row->team_uit, 
