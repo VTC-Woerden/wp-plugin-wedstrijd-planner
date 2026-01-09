@@ -33,12 +33,12 @@ $alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules, $jaar);
 
 $groupedByWeek = groupByWeek($alleWedstrijden);
 
-if (!key_exists($weeknummer, $groupedByWeek)) {
+if (!key_exists((string)(int)$weeknummer, $groupedByWeek)) {
     echo "Geen wedstrijden deze week.";
     return;
 }
 
-$dates = getDatesByWeek($groupedByWeek[$weeknummer]);
+$dates = getDatesByWeek($groupedByWeek[(string)(int)$weeknummer]);
 
 ?>
     <img class="logo" src="https://vtcwoerden.nl/wp-content/uploads/2022/09/VTC-logo-nieuw-blauw.jpg" alt="VTC Woerden">
