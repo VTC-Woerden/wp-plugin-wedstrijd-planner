@@ -79,12 +79,13 @@ function fetch_wedstrijden() {
 			// First row is the heading
 			continue;
 		}
+
 		array_push($wedstrijden, 
-	array(
+			array(
 				'code' => $row[8],
 				'team_thuis' => $row[2], 
 				'team_uit' => $row[3],
-				'datum' => $row[1], 
+				'datum' => date('Y-m-d', strtotime($row[0])) . ' ' . $row[1] . ':00',
 				'veld' => $row[5],
 				'regio' => $row[6],
 				'poule' => $row[7]
@@ -148,7 +149,7 @@ function wedstrijd_planner_init(){
 		?>
 			<h3>Geen wedstrijden gevonden. Klik hieronder om wedstrijden op te halen.</h3>
 			<form method="POST" id="vernieuw_wedstrijden_form">
-				<?php //wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
+				<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
 				<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Haal wedstrijden op"/>
 			</form>
 		<?php

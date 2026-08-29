@@ -69,7 +69,6 @@ function get_all_teams($wedstrijden){
 }
 
 function render_tabel($wedstrijden, $wedstrijdenSeizoenen, $teams_with_second_referees, $teams_with_teller_only) {
-
 	$groupedData = array_reduce($wedstrijden, function ($result, $item) {
 		$date = new DateTime($item['datum']);
 		$formattedDate = $date->format('Y-m-d');
@@ -241,8 +240,6 @@ function render_header($wedstrijdenSeizoenen) {
 			<?php foreach(array_keys($wedstrijdenSeizoenen) as $season): ?>
 				<a href="<?= $_SERVER['REQUEST_URI'].'&season='. $season ?>"><?= $season ?></a>
 			<?php endforeach; ?>
-
-			
 
 			<div class="legenda">
 				<h3>Legenda</h3>
