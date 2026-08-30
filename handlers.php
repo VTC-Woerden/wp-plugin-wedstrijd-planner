@@ -72,3 +72,51 @@ function findIndexByKeyValue($array, $key, $value) {
     }
     return -1; // Return -1 if the object is not found
 }
+
+function handle_export_excel($wedstrijden = null) {
+	if(!isset($_POST['export_excel']) || !wp_verify_nonce($_POST['export_excel_nonce'])) {
+		return;
+	}
+
+	require_once(dirname(__FILE__) . '/SimpleXLSXGen.php');
+
+	// If wedstrijden not provided, fetch them
+	if ($wedstrijden === null) {
+		require_once(dirname(__FILE__) . '/database.php');
+		$exclude_poules = get_entries("poule", tableName: "wedstrijd_planner_exclude_poules");
+		$alleWedstrijden = fetch_database_wedstrijden(null, $exclude_poules);
+		$wedstrijdenSeizoenen = group_by_dynamic_half_year($alleWedstrijden);
+		$activeSeason = $_GET['season'] ?? get_current_half_year($wedstrijdenSeizoenen);
+		$wedstrijden = $wedstrijdenSeizoenen[$activeSeason];
+	}
+
+	// Convert wedstrijden array to Excel format
+	$data = [
+		['Team Thuis', 'Team Uit', 'Datum', 'Veld', 'Teller', 'Scheidsrechter'],
+	];
+
+	foreach ($wedstrijden as $wedstrijd) {
+		$data[] = [
+			$wedstrijd['team_thuis'],
+			$wedstrijd['team_uit'],
+			$wedstrijd['datum'],
+			$wedstrijd['veld'],
+			$wedstrijd['teller'] ?? '',
+			$wedstrijd['scheidsrechter'] ?? '',
+		];
+	}
+
+	$xlsx = Shuchkin\SimpleXLSXGen::fromArray($data);
+
+	// Set headers for file download
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment; filename="wedstrijden-export.xlsx"');
+
+	// Make sure warnings/notices don't get mixed into the XLSX
+	while (ob_get_level()) {
+		ob_end_clean();
+	}
+
+	echo (string) $xlsx;
+	exit;
+}

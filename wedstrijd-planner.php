@@ -131,6 +131,11 @@ function get_current_half_year(): string {
 }
 
 
+function wedstrijd_planner_admin_hooks() {
+	handle_export_excel();
+}
+add_action('admin_init', 'wedstrijd_planner_admin_hooks');
+
 function wedstrijd_planner_init(){
 
 	add_thickbox();

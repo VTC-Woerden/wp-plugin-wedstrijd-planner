@@ -252,6 +252,10 @@ function render_header($wedstrijdenSeizoenen) {
 						<?php wp_nonce_field(-1, 'verwijder_rode_bolletjes_nonce') ?>
 						<input type="submit" name="verwijder_rode_bolletjes" class="button button-primary" value="Wijzigingen gezien"/>
 					</form>
+					<form method="POST" id="export_excel">
+						<?php wp_nonce_field(-1, 'export_excel_nonce') ?>
+						<input type="submit" name="export_excel" class="button button-primary" value="Exporteren naar Excel"/>
+					</form>
 					<form method="POST" id="vernieuw_wedstrijden_form">
 						<?php wp_nonce_field(-1, 'vernieuw_wedstrijden_nonce') ?>
 						<input type="submit" name="vernieuw_wedstrijden" class="button button-primary" value="Venieuw wedstrijden"/>
