@@ -21,7 +21,11 @@ function handle_vernieuw_wedstrijden() {
 		$nieuweWedstrijden = fetch_wedstrijden();
 
 		$nieuweWedstrijdenInDeToekomst = array_filter($nieuweWedstrijden, function($wedstrijd) {
-			return new DateTime($wedstrijd["datum"]) > new DateTime();
+			try {
+				return new DateTime($wedstrijd["datum"]) > new DateTime();
+			} catch (Exception $e) {
+				return false;
+			}
 		});
 
 		$updatedWedstrijden = update_wedstrijden_database($nieuweWedstrijdenInDeToekomst);
